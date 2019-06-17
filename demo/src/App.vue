@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <VueRecoCarousel :list="list">
-      <div v-for="(i, index) in [1,2,3,4,5]" :key="index">
+    <VueRecoCarousel :length="length">
+      <div>
         <h1 class="test3">hello world</h1>
         <img
           class="event-banner-item-image"
@@ -24,8 +24,7 @@ export default {
   },
   data() {
     return {
-      length: 12,
-      list: [1, 2, 3, 4, 5, 6, 7]
+      length: 12
     };
   }
 };

@@ -1,7 +1,13 @@
 
 <template>
   <div>
-    <Items :items="list" :template="template" :mousewheel="wheelEvent" :wheel="wheel">
+    <Items
+      :length="length"
+      :template="template"
+      :mousewheel="wheelEvent"
+      :wheel="wheel"
+      :requestAnimationFrame="requestAnimationFrame"
+    >
       <slot>default render html</slot>
     </Items>
   </div>
@@ -13,9 +19,14 @@ const Items = {
     items: Array,
     template: Array,
     mousewheel: Function,
-    wheel: Function
+    wheel: Function,
+    requestAnimationFrame: Function,
+    length: Number
   },
   render(createElement) {
+    var target = document.querySelector(".vue-reco-carousel");
+    console.log(this.template[0]);
+
     return createElement(
       "div",
       {
@@ -27,22 +38,35 @@ const Items = {
             console.log(123);
           },
           mousewheel: this.mousewheel,
-          wheel: this.wheel
+          wheel: this.wheel,
+          touchend: e => {
+            var target = document.querySelector(".vue-reco-carousel");
+            this.requestAnimationFrame(target.scrollTo);
+            window.target = target;
+            target.scrollTo(100, 0);
+            console.log(target);
+          }
         }
       },
-      this.template
+      new Array(this.length)
+        .fill(1)
+        .map((e, i) => i)
+        .map(e => {
+          return this.template;
+        })
     );
   }
 };
 export default {
   name: "VueRecoCarousel",
-  props: { list: Array, classes: Array },
+  props: { length: Number },
   components: {
     Items
   },
   data() {
     return {
       template: this.$slots.default,
+
       requestAnimationFrame: () => {},
       cancelAnimationFrame: () => {},
       movePoint: 0,
@@ -116,7 +140,7 @@ export default {
       } else if (listMoveX < listMoveEnd) {
         listMoveX = listMoveEnd;
       }
-      console.log(transformPrefix, listMoveX);
+      // console.log(transformPrefix, listMoveX);
       list.style[transformPrefix] = "translateX(" + listMoveX + "px)";
     },
     wheelEvent: function(e) {
@@ -131,7 +155,7 @@ export default {
       this.ticking = true;
     },
     wheel: function(e) {
-      console.log(e);
+      // console.log(e);
       this.wheelEvent(e);
       if (!this.isWheel) {
         e.target.parentNode.parentNode.removeEventListener(
