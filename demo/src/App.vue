@@ -1,28 +1,49 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <VueRecoCarousel :list="list">
+      <div v-for="(i, index) in [1,2,3,4,5]" :key="index">
+        <h1 class="test3">hello world</h1>
+        <img
+          class="event-banner-item-image"
+          itemprop="contentURL"
+          srcset="https://cdn.pixabay.com/photo/2017/09/22/21/23/usa-2777088_960_720.jpg 1x, https://cdn.pixabay.com/photo/2017/09/22/21/23/usa-2777088_1280.jpg 1.333x"
+          src="https://cdn.pixabay.com/photo/2017/09/22/21/23/usa-2777088_960_720.jpg"
+          alt="미국, 캘리포니아, 샌디에고, Del Mar, 비치, 고독, 바다, 사람, 걷기, 인간의, 물"
+        >
+      </div>
+    </VueRecoCarousel>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import VueRecoCarousel from "./VueRecoCarousel";
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
+    VueRecoCarousel
+  },
+  data() {
+    return {
+      length: 12,
+      list: [1, 2, 3, 4, 5, 6, 7]
+    };
   }
-}
+};
 </script>
 
-<style>
+<style scoped>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.test3 {
+  font-size: 50px;
+}
+.event-banner-item-image {
+  width: 100%;
 }
 </style>
