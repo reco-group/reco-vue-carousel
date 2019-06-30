@@ -1,30 +1,273 @@
 <template>
   <div id="app">
-    <VueRecoCarousel :length="length">
-      <div>
+    <VueRecoCarousel :options="options">
+      <VueRecoCarouselItem v-for="(item, idx) in list" :key="idx">
         <h1 class="test3">hello world</h1>
-        <img
-          class="event-banner-item-image"
-          itemprop="contentURL"
-          srcset="https://cdn.pixabay.com/photo/2017/09/22/21/23/usa-2777088_960_720.jpg 1x, https://cdn.pixabay.com/photo/2017/09/22/21/23/usa-2777088_1280.jpg 1.333x"
-          src="https://cdn.pixabay.com/photo/2017/09/22/21/23/usa-2777088_960_720.jpg"
-          alt="미국, 캘리포니아, 샌디에고, Del Mar, 비치, 고독, 바다, 사람, 걷기, 인간의, 물"
-        >
-      </div>
+        <h2>{{item.title}}</h2>
+        <img class="event-banner-item-image" :src="item.image" />
+      </VueRecoCarouselItem>
     </VueRecoCarousel>
+    <pre>
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+
+      adfljsakdhasd
+      fasfag
+      asdf
+      asdfads
+    </pre>
   </div>
 </template>
 
 <script>
 import VueRecoCarousel from "./VueRecoCarousel";
+import VueRecoCarouselItem from "./VueRecoCarouselItem";
 export default {
   name: "app",
   components: {
-    VueRecoCarousel
+    VueRecoCarousel,
+    VueRecoCarouselItem
   },
   data() {
     return {
-      length: 12
+      options: {
+        page_size: 3
+      },
+      list: [
+        {
+          title: "title1 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/25/04/40/light-4297386_1280.jpg"
+        },
+        {
+          title: "title2 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/11/20/14/dandelion-4120515_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        },
+        {
+          title: "title3 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/04/29/14/50/camogli-4166255_1280.jpg"
+        },
+        {
+          title: "title4 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2019/06/14/09/25/cloud-4273197_1280.png"
+        },
+        {
+          title: "title5 of vue reco carousel",
+          image:
+            "https://cdn.pixabay.com/photo/2017/06/17/18/35/background-2413081_1280.jpg"
+        }
+      ]
     };
   }
 };

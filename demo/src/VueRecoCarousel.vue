@@ -1,78 +1,33 @@
 
 <template>
-  <div>
-    <Items
-      :length="length"
-      :template="template"
-      :mousewheel="wheelEvent"
-      :wheel="wheel"
-      :requestAnimationFrame="requestAnimationFrame"
+  <div class="vue-reco-carousel">
+    <div
+      class="vue-reco-carousel-container"
+      @touchmove="()=>{}"
+      @touchstart.stop.prevent="touchStartEvent"
+      @touchend.stop.prevent="touchEndEvent"
     >
-      <slot>default render html</slot>
-    </Items>
+      <div class="vue-reco-carousel-contents">
+        <slot>default render html</slot>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-const Items = {
-  props: {
-    items: Array,
-    template: Array,
-    mousewheel: Function,
-    wheel: Function,
-    requestAnimationFrame: Function,
-    length: Number
-  },
-  render(createElement) {
-    var target = document.querySelector(".vue-reco-carousel");
-    console.log(this.template[0]);
-
-    return createElement(
-      "div",
-      {
-        attrs: {
-          class: "vue-reco-carousel"
-        },
-        on: {
-          click: () => {
-            console.log(123);
-          },
-          mousewheel: this.mousewheel,
-          wheel: this.wheel,
-          touchend: e => {
-            var target = document.querySelector(".vue-reco-carousel");
-            this.requestAnimationFrame(target.scrollTo);
-            window.target = target;
-            target.scrollTo(100, 0);
-            console.log(target);
-          }
-        }
-      },
-      new Array(this.length)
-        .fill(1)
-        .map((e, i) => i)
-        .map(e => {
-          return this.template;
-        })
-    );
-  }
-};
+import Vue from "vue";
+import { setTimeout } from "timers";
 export default {
   name: "VueRecoCarousel",
-  props: { length: Number },
-  components: {
-    Items
-  },
+  props: { options: Object },
+  components: {},
   data() {
     return {
-      template: this.$slots.default,
-
-      requestAnimationFrame: () => {},
-      cancelAnimationFrame: () => {},
-      movePoint: 0,
-      ticking: false,
-      isWheel: false,
-      el: document.querySelector(".vue-reco-carousel")
+      page_no: 0,
+      pos: 0,
+      scrollLeft: 0,
+      t: 0,
+      animation_id: 0
     };
   },
   computed: {
@@ -87,89 +42,95 @@ export default {
     }
   },
   methods: {
-    initFunction() {
-      var lastTime = 0;
-      var vendors = ["ms", "moz", "webkit", "o"];
-      for (
-        var x = 0;
-        x < vendors.length && !window.requestAnimationFrame;
-        ++x
-      ) {
-        this.requestAnimationFrame =
-          window[vendors[x] + "RequestAnimationFrame"];
-        this.cancelAnimationFrame =
-          window[vendors[x] + "CancelAnimationFrame"] ||
-          window[vendors[x] + "CancelRequestAnimationFrame"];
+    touchStartEvent(e) {
+      this.pos = e.touches[0].clientX;
+    },
+    touchEndEvent(e) {
+      this.pos = this.pos - e.changedTouches[0].clientX;
+      var el = e.target;
+      this.scrollLeft = getComputedStyle(e.target).transformOrigin;
+      while (el.className !== "vue-reco-carousel-container") {
+        el = el.parentNode;
       }
-      if (!this.requestAnimationFrame)
-        this.requestAnimationFrame = function(callback, element) {
-          var currTime = new Date().getTime();
-          var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-          var id = window.setTimeout(function() {
-            callback(currTime + timeToCall);
-          }, timeToCall);
-          lastTime = currTime + timeToCall;
-          return id;
+      let left = 0;
+      const max_page = parseInt(el.children[0].children.length / 3);
+      let is_right = false;
+      if (this.pos > 0) {
+        if (this.page_no < max_page) this.page_no++;
+        console.log("move right");
+        is_right = true;
+      } else {
+        if (this.page_no > 0) this.page_no--;
+        console.log("move left");
+        is_right = false;
+      }
+
+      const animate_move = t => {
+        if (this.t === 0) this.t = t;
+
+        var cubicBezier = (A, B, C, D, t) => {
+          if (t <= 0) {
+            return A;
+          }
+          if (t >= 1) {
+            return D;
+          }
+          const s = 1 - t;
+          return (
+            Math.pow(s, 3) * A +
+            3 * (Math.pow(s, 2) * t) * B +
+            3 * (s * Math.pow(t, 2)) * C +
+            Math.pow(t, 3) * D
+          );
         };
-      if (!this.cancelAnimationFrame) {
-        this.cancelAnimationFrame = function(id) {
-          clearTimeout(id);
-        };
-      }
-    },
-    getTransX() {
-      const list = this.el;
-      const transformPrefix = this.transformPrefix;
-      return getComputedStyle(list)[transformPrefix];
-    },
-    listMoveX() {
-      return parseInt(this.getTransX.split(",")[4]);
-    },
-    listMoveEnd() {
-      const list = this.el;
-      return (list.scrollWidth - list.offsetWidth) * -1;
-    },
-    listMoving: function(movePoint) {
-      const list = this.el;
-      const listMoveEnd = this.listMoveEnd();
-      const transformPrefix = this.transformPrefix;
-      let istMoveX = this.listMoveX();
-      istMoveX -= movePoint;
-      if (listMoveX > 0) {
-        listMoveX = 0;
-      } else if (listMoveX < listMoveEnd) {
-        listMoveX = listMoveEnd;
-      }
-      // console.log(transformPrefix, listMoveX);
-      list.style[transformPrefix] = "translateX(" + listMoveX + "px)";
-    },
-    wheelEvent: function(e) {
-      let movePoint =
-        (e.type == "mousewheel" ? e.wheelDelta : e.deltaX) || e.deltaY;
-      if (!this.ticking) {
-        this.requestAnimationFrame(function() {
-          this.listMoving(movePoint);
-          this.ticking = false;
-        });
-      }
-      this.ticking = true;
-    },
-    wheel: function(e) {
-      // console.log(e);
-      this.wheelEvent(e);
-      if (!this.isWheel) {
-        e.target.parentNode.parentNode.removeEventListener(
-          "mousewheel",
-          this.wheelEvent
+        const sorc = is_right
+          ? parseInt(getComputedStyle(el).width) * (this.page_no - 1)
+          : parseInt(getComputedStyle(el).width) * (this.page_no + 1);
+        const dest = parseInt(getComputedStyle(el).width) * this.page_no;
+        let diff = dest - sorc;
+        console.log("(t - this.t)", t - this.t);
+        const move_point = cubicBezier(
+          sorc,
+          sorc + diff * 0.15,
+          sorc + diff * 0.85,
+          dest,
+          (t - this.t) / 200
         );
-        this.isWheel = true;
-      }
+
+        el.scrollLeft = move_point;
+        if (move_point !== dest || el.scrollLeft !== dest) {
+          window.requestAnimationFrame(animate_move);
+        } else {
+          this.t = 0;
+        }
+      };
+
+      window.requestAnimationFrame(animate_move);
+      return true;
     }
   },
 
-  mounted() {},
+  mounted() {
+    const container = document.querySelector(".vue-reco-carousel-container");
+    console.log(getComputedStyle(container).width);
+    const items = document.querySelectorAll(
+      ".vue-reco-carousel-contents .vue-reco-carousel-item"
+    );
+    for (var i = 0; i < items.length; i++) {
+      console.log(
+        `${parseInt(getComputedStyle(container).width) /
+          this.options.page_size}px`
+      );
+      items[i].style.maxWidth = `${parseInt(getComputedStyle(container).width) /
+        this.options.page_size}px`;
+      items[i].style.minWidth = `${parseInt(getComputedStyle(container).width) /
+        this.options.page_size}px`;
+    }
+  },
   created() {
-    this.initFunction();
+    window.slot = this.$slots;
+    window.t = this;
+    window.Vue = Vue;
   }
 };
 </script>
@@ -182,7 +143,7 @@ export default {
   flex-direction: row;
   align-items: center;
 }
-.vue-reco-carousel >>> div {
+.vue-reco-carousel {
   background: white;
   display: flex;
   flex-direction: column;
@@ -190,5 +151,21 @@ export default {
   align-items: center;
   margin: 0 auto;
   min-width: 100%;
+}
+.vue-reco-carousel-container {
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
+  min-width: 100%;
+  max-width: 100%;
+}
+.vue-reco-carousel-contents >>> .vue-reco-carousel-item {
+  /* min-width: calc(100% / 4); */
+}
+.vue-reco-carousel-contents {
+  display: flex;
+  flex-direction: row;
+  width: auto;
+  /* max-width: 100%; */
 }
 </style>
